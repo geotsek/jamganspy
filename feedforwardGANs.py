@@ -25,7 +25,7 @@ from utils import Logger
 
 
 baseDir = '/Users/georgio/MyStuff/MyData/jamGANsOut'
-file_data_out = baseDir + os.sep + 'jamGANsOut.dat'
+file_data_out = baseDir + os.sep + 'jamGANsOut_.dat'
 
     
 #allORsomeORlabeled = 0 (all), 1 (some), 2(labels) 
@@ -38,8 +38,8 @@ d_steps = 1  # In Goodfellow et. al 2014 this variable is assigned to 1
 #num_epochs = 200
 num_epochs = 10
 # Batch size
-batch_size = 100
-
+batch_size = -1
+    
 ##LOAD DATA
 ## data come from http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz  || 60k images of hand-written digits
 DATA_FOLDER = '/Users/georgio/MyStuff/MyData/MNIST'
@@ -50,6 +50,8 @@ data = functionsGANs.mnist_data(DATA_FOLDER)
 if allORsomeORlabeled == 0:
     # Create loader with all data, so that we can iterate over it
     data1 = data
+    # Batch size
+    batch_size = 100
     #data_loader = torch.utils.data.DataLoader(data1, batch_size, shuffle=True)
 
 if allORsomeORlabeled == 1:
@@ -58,6 +60,8 @@ if allORsomeORlabeled == 1:
     dataset_use = 1000
     dataset = torch.utils.data.dataset.random_split(data,(dataset_use,dataset_total-dataset_use))
     data1 = dataset[0]
+    # Batch size
+    batch_size = 100
     #data_loader = torch.utils.data.DataLoader(data1, batch_size, shuffle=True)
 
 if allORsomeORlabeled == 2:
@@ -65,6 +69,8 @@ if allORsomeORlabeled == 2:
     indices = np.where( (data.targets == 0) + (data.targets == 1) )[0]
     # Load data
     data1 = torch.utils.data.Subset(data, indices)
+    # Batch size
+    batch_size = 10
     #data_loader = torch.utils.data.DataLoader(data1, batch_size, shuffle=True)
 
 data_loader = torch.utils.data.DataLoader(data1, batch_size, shuffle=True)

@@ -28,7 +28,7 @@ topDir = '/Users/georgio/MyStuff/MyData/jamGANsOut'
 outFig1pdf = topDir + os.sep + 'jamGANsOut' + '_.pdf'
 outFig1png = topDir + os.sep + 'jamGANsOut' + '_.png'
 
-lbls = np.array(['step','d_error','g_error','d_pred_real','d_pred_fake'])
+lbls = np.array(['step','d_error(d_loss)','g_error(g_loss)','d_pred_real','d_pred_fake'])
 
 #cmap = cm.get_cmap("rainbow")
 #cmap = cm.get_cmap("prism")
@@ -83,8 +83,8 @@ axs[1,1].set_ylabel(lbls[4],size=12)
     
 #title = crystalFlag + ',Gaps3,N=' + str(nParticles) + ',Ns=' + str(numFiles)
 #fig.suptitle(title,fontsize=20)
-#fig.savefig(outFig1pdf)
-#fig.savefig(outFig1png,dpi=400)
+fig.savefig(outFig1pdf)
+fig.savefig(outFig1png,dpi=400)
 
 print(" - - - - - The End! - - - - - ")
 
