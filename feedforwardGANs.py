@@ -27,8 +27,9 @@ from utils import Logger
 baseDir = '/Users/georgio/MyStuff/MyData/jamGANsOut'
 file_data_out = baseDir + os.sep + 'jamGANsOut.dat'
 
+    
 #allORsomeORlabeled = 0 (all), 1 (some), 2(labels) 
-allORsomeORlabeled = 0
+allORsomeORlabeled = 2
 
 # Number of steps to apply to the discriminator relative to number of steps of generator (GT: i think)
 d_steps = 1  # In Goodfellow et. al 2014 this variable is assigned to 1
@@ -36,35 +37,37 @@ d_steps = 1  # In Goodfellow et. al 2014 this variable is assigned to 1
 # Number of epochs
 #num_epochs = 200
 num_epochs = 10
+# Batch size
+batch_size = 100
 
 ##LOAD DATA
 ## data come from http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz  || 60k images of hand-written digits
 DATA_FOLDER = '/Users/georgio/MyStuff/MyData/MNIST'
-# Load data
+# download data
 data = functionsGANs.mnist_data(DATA_FOLDER)
-batch_size = 100
 
 
 if allORsomeORlabeled == 0:
-    # Create loader with data, so that we can iterate over it
+    # Create loader with all data, so that we can iterate over it
     data1 = data
-    data_loader = torch.utils.data.DataLoader(data1, batch_size, shuffle=True)
+    #data_loader = torch.utils.data.DataLoader(data1, batch_size, shuffle=True)
 
 if allORsomeORlabeled == 1:
-    # Create loader with data split to given size
+    # Create loader with data split to smaller wanted size
     dataset_total = 60000
     dataset_use = 1000
     dataset = torch.utils.data.dataset.random_split(data,(dataset_use,dataset_total-dataset_use))
     data1 = dataset[0]
-    data_loader = torch.utils.data.DataLoader(data1, batch_size, shuffle=True)
+    #data_loader = torch.utils.data.DataLoader(data1, batch_size, shuffle=True)
 
 if allORsomeORlabeled == 2:
-    # Create loader with data label selection. GT: DOES NOT WORK WITH LOADER like this 
-    indices = np.where( (data.targets==0) + (data.targets==1) )
-    dataset = torch.utils.data.Subset(data, indices)
-    #dataset =  torch.utils.data.SubsetRandomSampler(indices)
-    data1 = dataset
-    data_loader = torch.utils.data.DataLoader(data1, batch_size, shuffle=True)
+    # Create loader with data label selection 
+    indices = np.where( (data.targets == 0) + (data.targets == 1) )[0]
+    # Load data
+    data1 = torch.utils.data.Subset(data, indices)
+    #data_loader = torch.utils.data.DataLoader(data1, batch_size, shuffle=True)
+
+data_loader = torch.utils.data.DataLoader(data1, batch_size, shuffle=True)
 
 # Num batches
 num_batches = len(data_loader)
