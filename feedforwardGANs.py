@@ -36,7 +36,7 @@ d_steps = 1  # In Goodfellow et. al 2014 this variable is assigned to 1
 
 # Number of epochs
 #num_epochs = 200
-num_epochs = 10
+num_epochs = 2
 # Batch size
 batch_size = -1
     
@@ -143,6 +143,11 @@ all_data_out = []
 logger = Logger(model_name='ffGAN', data_name='MNIST')
 # Total number of epochs to train
 # num_epochs = 200
+
+#flush write to file approx every [bufsize] lines
+bufsize = 100
+file_out = open(file_data_out, 'w', buffering=bufsize)
+
 for epoch in range(num_epochs):
     for n_batch, (real_batch,_) in enumerate(data_loader):
                 
@@ -177,18 +182,23 @@ for epoch in range(num_epochs):
         some_data_out = np.array([step, d_error.item(),g_error.item(),d_pred_real.mean().item(),d_pred_fake.mean().item()])
         some_data_out = np.expand_dims(some_data_out, axis=0)
             
+        '''
+        #saving incremental data into a big np.array to be saved to file in the end
         if epoch == 0 and n_batch == 0:
             #print("A..."," epoch = ", epoch," n_batch = ", n_batch)
             all_data_out = np.copy(some_data_out)
-                
         else:
             #print("B..."," epoch = ", epoch," n_batch = ", n_batch)
             all_data_out = np.vstack((all_data_out, some_data_out))
-            
-            
+        '''  
+        #saving incremental data directly to file 
+        np.savetxt(file_out, some_data_out, delimiter='\t',fmt='%.16f')
             
 print('np.shape(all_data_out)=',np.shape(all_data_out))
+'''
 np.savetxt(file_data_out, all_data_out, delimiter='\t',fmt='%.16f')
+'''
+file_out.close()
 
 
 

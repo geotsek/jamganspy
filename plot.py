@@ -45,7 +45,7 @@ rcParams.update({'figure.autolayout': True})
 
 fig, axs = plt.subplots( 2, 2, sharex=True, gridspec_kw={'hspace': 0.5,'wspace': 0.5}, figsize=(6,5))
 
-fileFs = topDir + os.sep + 'jamGANsOut.dat'
+fileFs = topDir + os.sep + 'jamGANsOut_.dat'
 
 S=[]
 S = np.loadtxt(fileFs,dtype=np.float64)
